@@ -1,19 +1,23 @@
 import React, { useContext, useReducer } from 'react';
 import axios from 'axios';
-import { BASE_API } from '../constants';
+import { POPULAR_API, BASE_API, API_KEY_V3 } from '../constants';
 import {
     GET_FILMS_ERROR,
     GET_FILMS_LOADING,
     GET_FILMS_SUCCESS,
     SET_SEARCH_RESULTS,
+    GET_ONE_FILM_ERROR,
+    GET_ONE_FILM_LOADING,
+    GET_ONE_FILM_SUCCESS,
 } from './constants';
 
+import { filmsError, filmsLoading, filmsSuccess } from './FilmActions';
+
 import {
-    filmsError,
-    filmsLoading,
-    filmsSuccess,
-    setSearchResults,
-} from './FilmActions';
+    getoneFilmSuccess,
+    getOneFilmError,
+    getOneFilmLoading,
+} from './FilmDetailsAction';
 
 const filmsContext = React.createContext();
 
@@ -21,6 +25,11 @@ export const useFilms = () => useContext(filmsContext);
 
 const INIT_STATE = {
     films: [],
+    fimlDetails: {
+        loading: false,
+        error: null,
+        film: null,
+    },
     loading: false,
     error: null,
     page: 1,
@@ -49,6 +58,36 @@ const reducer = (state = INIT_STATE, action) => {
                 totalPages: action.payload.total_pages,
                 totalResult: action.payload.total_results,
             };
+        case GET_ONE_FILM_LOADING:
+            return {
+                ...state,
+                fimlDetails: {
+                    ...state.fimlDetails,
+                    loading: true,
+                },
+            };
+
+        case GET_ONE_FILM_ERROR:
+            return {
+                ...state,
+                fimlDetails: {
+                    ...state.fimlDetails,
+                    loading: false,
+                    error: action.payload,
+                    film: null,
+                },
+            };
+
+        case GET_ONE_FILM_SUCCESS:
+            return {
+                ...state,
+                fimlDetails: {
+                    ...state.fimlDetails,
+                    loading: false,
+                    error: null,
+                    film: action.payload,
+                },
+            };
         default:
             return state;
     }
@@ -59,15 +98,26 @@ const FilmsContext = ({ children }) => {
     const fetchFilms = async () => {
         dispatch(filmsLoading());
         try {
-            const { data } = await axios(`${BASE_API}`);
+            const { data } = await axios(`${POPULAR_API}`);
             // const { data } = await axios(`${BASE_API}/${window.location.search}`);
             // console.log(window.location.search);
-            setTimeout(() => {
-                dispatch(filmsSuccess(data));
-            }, 1000);
+            dispatch(filmsSuccess(data));
         } catch (error) {
             console.log(error.message);
             dispatch(filmsError(error.message));
+        }
+    };
+
+    const fetchOneFilm = async (id) => {
+        dispatch(getOneFilmLoading());
+        try {
+            const { data } = await axios(
+                `${BASE_API}${id}?api_key=${API_KEY_V3}`
+            );
+            dispatch(getoneFilmSuccess(data));
+        } catch (error) {
+            console.log(error.message);
+            dispatch(getOneFilmError(error.message));
         }
     };
 
@@ -81,6 +131,10 @@ const FilmsContext = ({ children }) => {
                 totalPages: state.totalPages,
                 total_results: state.totalResult,
                 fetchFilms,
+                oneFimlDetails: state.fimlDetails.film,
+                oneFilmError: state.fimlDetails.error,
+                OneFilmsLoading: state.fimlDetails.loading,
+                fetchOneFilm,
             }}
         >
             {children}

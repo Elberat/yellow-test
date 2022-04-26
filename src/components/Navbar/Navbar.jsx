@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { Container } from '../../App';
 
 const NavbarWrapper = styled.div`
@@ -45,7 +46,9 @@ const Navbar = () => {
             <hr />
             <Container>
                 <NavbarWrapper>
-                    <h2>The Movie Database API</h2>
+                    <Link to={`/`}>
+                        <h2>The Movie Database API</h2>
+                    </Link>
                     <SeatchInputWrapper>
                         <SearchInput placeholder='Search' />
                         <SearchInputButton />

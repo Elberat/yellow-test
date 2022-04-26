@@ -4,9 +4,16 @@ import { Container } from '../../App';
 import { useFilms } from '../../context/FilmContext';
 import FilmCard from './FilmsCard';
 
-const Loader = styled.h2`
+export const Loader = styled.h2`
     text-align: center;
-    margin: 30% auto;
+    margin: 20% auto;
+`;
+
+const ListWrapper = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
 `;
 
 const FilmsList = () => {
@@ -22,15 +29,17 @@ const FilmsList = () => {
     }
 
     if (error) {
-        <Loader>{error}</Loader>;
+        return <Loader>{error}</Loader>;
     }
 
     return (
         <Container>
             <h2>Popular Films</h2>
-            {films.map((film) => (
-                <FilmCard key={film.id} film={film} />
-            ))}
+            <ListWrapper>
+                {films.map((film) => (
+                    <FilmCard key={film.id} film={film} />
+                ))}
+            </ListWrapper>
         </Container>
     );
 };
