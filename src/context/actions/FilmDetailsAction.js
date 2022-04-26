@@ -2,7 +2,7 @@ import {
     GET_ONE_FILM_ERROR,
     GET_ONE_FILM_LOADING,
     GET_ONE_FILM_SUCCESS,
-} from './constants';
+} from '../constants';
 
 export const getOneFilmLoading = () => ({ type: GET_ONE_FILM_LOADING });
 

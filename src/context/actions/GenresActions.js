@@ -2,7 +2,7 @@ import {
     GET_GENRES_ERROR,
     GET_GENRES_LOADING,
     GET_GENRES_SUCCESS,
-} from './constants';
+} from '../constants';
 
 export const genresLoading = () => ({ type: GET_GENRES_LOADING });
 

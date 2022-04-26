@@ -8,10 +8,11 @@ const NavbarWrapper = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
 `;
 
 const SeatchInputWrapper = styled.div`
-    width: 30%;
+    width: 300px;
     display: flex;
     height: 36px;
 `;
@@ -58,6 +59,10 @@ const Navbar = () => {
                     <Link to={`/`}>
                         <h2>The Movie Database API</h2>
                     </Link>
+                    <Link to={`/fav`}>
+                        <h2>Favorites</h2>
+                    </Link>
+
                     <SeatchInputWrapper>
                         <SearchInput
                             value={search}

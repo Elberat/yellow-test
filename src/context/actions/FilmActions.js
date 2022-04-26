@@ -3,7 +3,7 @@ import {
     GET_FILMS_LOADING,
     GET_FILMS_SUCCESS,
     SET_SEARCH_RESULTS,
-} from './constants';
+} from '../constants';
 
 export const filmsLoading = () => ({ type: GET_FILMS_LOADING });
 

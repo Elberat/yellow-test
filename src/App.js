@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import FilmsContext from './context/FilmContext';
-import FilmsList from './components/Films/FilmsList';
 import Navbar from './components/Navbar/Navbar';
 import Routing from './Routes';
 import { BrowserRouter } from 'react-router-dom';
+import FavoriteContextProvider from './context/FavoriteContext';
+import FilmsContextProvider from './context/FilmContext';
 
 export const Container = styled.div`
     width: 80vw;
@@ -14,12 +14,14 @@ export const Container = styled.div`
 function App() {
     return (
         <>
-            <FilmsContext>
-                <BrowserRouter>
-                    <Navbar />
-                    <Routing />
-                </BrowserRouter>
-            </FilmsContext>
+            <FilmsContextProvider>
+                <FavoriteContextProvider>
+                    <BrowserRouter>
+                        <Navbar />
+                        <Routing />
+                    </BrowserRouter>
+                </FavoriteContextProvider>
+            </FilmsContextProvider>
         </>
     );
 }

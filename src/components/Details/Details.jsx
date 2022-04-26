@@ -1,12 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Container } from '../../App';
 import { useParams } from 'react-router';
 import { useFilms } from '../../context/FilmContext';
 import { Loader } from '../Films/FilmsList';
+import { favoriteContext } from '../../context/FavoriteContext';
+import { FavButton, RemoveFavButton } from '../Films/FilmsCard';
+
 const Details = () => {
     const { id } = useParams();
     const { oneFimlDetails, oneFilmError, OneFilmsLoading, fetchOneFilm } =
         useFilms();
+    const { addProductToFavorite, checkItemInFavorite } =
+        useContext(favoriteContext);
+    const [checkFavorite, setCheckFavorite] = useState(checkItemInFavorite(id));
     console.log(id);
 
     useEffect(() => {
@@ -61,6 +67,22 @@ const Details = () => {
                                 )
                             )}
                             company
+                        </div>
+                        <div
+                            onClick={() => {
+                                addProductToFavorite(oneFimlDetails);
+                                setCheckFavorite(
+                                    checkItemInFavorite(oneFimlDetails.id)
+                                );
+                            }}
+                        >
+                            {!checkFavorite ? (
+                                <FavButton>Add to favorites</FavButton>
+                            ) : (
+                                <RemoveFavButton>
+                                    Remove from favorites
+                                </RemoveFavButton>
+                            )}
                         </div>
                     </div>
                 </div>

@@ -20,15 +20,19 @@ import {
     GET_GENRES_SUCCESS,
 } from './constants';
 
-import { filmsError, filmsLoading, filmsSuccess } from './FilmActions';
+import { filmsError, filmsLoading, filmsSuccess } from './actions/FilmActions';
 
 import {
     getoneFilmSuccess,
     getOneFilmError,
     getOneFilmLoading,
-} from './FilmDetailsAction';
+} from './actions/FilmDetailsAction';
 
-import { genresError, genresLoading, genresSuccess } from './GenresActions';
+import {
+    genresError,
+    genresLoading,
+    genresSuccess,
+} from './actions/GenresActions';
 
 const filmsContext = React.createContext();
 
@@ -147,7 +151,7 @@ const reducer = (state = INIT_STATE, action) => {
             return state;
     }
 };
-const FilmsContext = ({ children }) => {
+const FilmsContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, INIT_STATE);
 
     const fetchFilms = async (page) => {
@@ -226,4 +230,4 @@ const FilmsContext = ({ children }) => {
     );
 };
 
-export default FilmsContext;
+export default FilmsContextProvider;

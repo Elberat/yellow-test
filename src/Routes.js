@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Details from './components/Details/Details';
+import Favorite from './components/Favorite/Favorite';
 import FilmsList from './components/Films/FilmsList';
 
 const Routing = () => {
@@ -13,6 +14,16 @@ const Routing = () => {
             link: '/:id',
             element: <Details />,
             id: 2,
+        },
+        {
+            link: '/fav',
+            element: <Favorite />,
+            id: 3,
+        },
+        {
+            link: '/fav/:id',
+            element: <Details />,
+            id: 4,
         },
     ];
 

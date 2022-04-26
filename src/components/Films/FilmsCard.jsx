@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { IoStarOutline, IoStar } from 'react-icons/io5';
 import { Loader } from './FilmsList';
+import { favoriteContext } from '../../context/FavoriteContext';
 
 const CardWrapper = styled.div`
     padding: 15px 15px;
@@ -12,6 +12,7 @@ const CardWrapper = styled.div`
 `;
 
 const CardButton = styled.button`
+    width: 100%;
     background-color: white;
     color: black;
     border: 2px solid #555555;
@@ -29,15 +30,55 @@ const CardButton = styled.button`
     }
 `;
 
+export const FavButton = styled.button`
+    width: 100%;
+    background-color: #57ac40;
+    color: #ffffff;
+    border: 2px solid #57ac40;
+    padding: 5px 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    &:hover {
+        background-color: #3d8928;
+        color: white;
+    }
+`;
+
+export const RemoveFavButton = styled.button`
+    width: 100%;
+    background-color: #ac2e2e;
+    color: black;
+    border: 2px solid #801b1b;
+    padding: 5px 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    &:hover {
+        background-color: #831f1f;
+        color: #000000;
+    }
+`;
+
 const FilmCard = ({ film, genres }) => {
-    const [fav, setFav] = useState(true);
-    console.log(film, genres);
+    const { addProductToFavorite, checkItemInFavorite } =
+        useContext(favoriteContext);
+    const [checkFavorite, setCheckFavorite] = useState(
+        checkItemInFavorite(film.id)
+    );
+
     const filmGenresId = film.genre_ids;
-    console.log(filmGenresId);
     let filmGenresArr = genres.filter((genre) =>
         filmGenresId.includes(genre.id)
     );
-    console.log(filmGenresArr);
 
     if (!film) {
         return <Loader>Loading...</Loader>;
@@ -66,18 +107,24 @@ const FilmCard = ({ film, genres }) => {
                 <b>Release:</b> {film.release_date}
             </p>
             <div>
-                {/* {fav ? (
-                    <IoStarOutline style={{ fontSize: '22px' }} />
-                ) : (
-                    <IoStar style={{ fontSize: '22px' }} />
-                )} */}
-            </div>
-            <div>
                 <b>Genres:</b>
                 {filmGenresArr.map((item) => (
                     <span> {item.name} </span>
                 ))}
             </div>
+            <div
+                onClick={() => {
+                    addProductToFavorite(film);
+                    setCheckFavorite(checkItemInFavorite(film.id));
+                }}
+            >
+                {!checkFavorite ? (
+                    <FavButton>Add to favorites</FavButton>
+                ) : (
+                    <RemoveFavButton>Remove from favorites</RemoveFavButton>
+                )}
+            </div>
+
             <Link to={`${film.id}`}>
                 <CardButton>Read more</CardButton>
             </Link>
