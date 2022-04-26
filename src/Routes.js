@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Details from './components/Details/Details';
 import Favorite from './components/Favorite/Favorite';
 import FilmsList from './components/Films/FilmsList';

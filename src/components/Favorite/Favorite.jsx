@@ -3,11 +3,10 @@ import { Container } from '../../App';
 import { favoriteContext } from '../../context/FavoriteContext';
 import { useFilms } from '../../context/FilmContext';
 import FilmCard from '../Films/FilmsCard';
-import { Loader, ListWrapper } from '../Films/FilmsList';
+import { ListWrapper } from '../Films/FilmsList';
 
 const Favorite = () => {
-    const { getFavorite, favorite, deleteFromFavorite } =
-        useContext(favoriteContext);
+    const { getFavorite, favorite } = useContext(favoriteContext);
     const { genres, fetchGenres } = useFilms();
 
     useEffect(() => {

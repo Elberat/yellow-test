@@ -46,11 +46,11 @@ const FavoriteContextProvider = ({ children }) => {
             // count: 1,
         };
         let isProductInFavorite = favorite.films.some(
-            (item) => item.item.id == product.id
+            (item) => item.item.id === product.id
         );
         if (isProductInFavorite) {
             favorite.films = favorite.films.filter(
-                (item) => item.item.id != product.id
+                (item) => item.item.id !== product.id
             );
         } else {
             favorite.films.push(newProduct);
@@ -66,7 +66,7 @@ const FavoriteContextProvider = ({ children }) => {
             };
         }
         let isProductInFavorite = favorite.films.some(
-            (item) => item.item.id == id
+            (item) => item.item.id === id
         );
         return isProductInFavorite;
     }
@@ -77,7 +77,7 @@ const FavoriteContextProvider = ({ children }) => {
                 films: [],
             };
         }
-        favorite.films = favorite.films.filter((item) => item.item.id != id);
+        favorite.films = favorite.films.filter((item) => item.item.id !== id);
         localStorage.setItem('favorite', JSON.stringify(favorite));
         getFavorite();
     }
