@@ -57,7 +57,7 @@ const Details = () => {
                             <h3>Companies</h3>
                             {oneFimlDetails.production_companies.map(
                                 (company) => (
-                                    <p>{company.name}</p>
+                                    <p key={company.name}>{company.name}</p>
                                 )
                             )}
                             company

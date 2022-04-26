@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Container } from '../../App';
+import { useFilms } from '../../context/FilmContext';
 
 const NavbarWrapper = styled.div`
     display: flex;
@@ -41,6 +42,14 @@ const SearchInputButton = styled.button`
 `;
 
 const Navbar = () => {
+    const { fetchSearchFilms } = useFilms();
+    const [search, setSearch] = useState('');
+    console.log(search);
+
+    const handleSearch = () => {
+        fetchSearchFilms(search);
+    };
+
     return (
         <>
             <hr />
@@ -50,8 +59,14 @@ const Navbar = () => {
                         <h2>The Movie Database API</h2>
                     </Link>
                     <SeatchInputWrapper>
-                        <SearchInput placeholder='Search' />
-                        <SearchInputButton />
+                        <SearchInput
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            placeholder='Search'
+                        />
+                        <SearchInputButton onClick={() => handleSearch()}>
+                            s
+                        </SearchInputButton>
                     </SeatchInputWrapper>
                 </NavbarWrapper>
             </Container>

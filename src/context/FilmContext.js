@@ -1,6 +1,6 @@
-import React, { useContext, useReducer } from 'react';
+import React, { useContext, useReducer, useState } from 'react';
 import axios from 'axios';
-import { POPULAR_API, BASE_API, API_KEY_V3 } from '../constants';
+import { POPULAR_API, BASE_API, API_KEY_V3, SEARCH_API } from '../constants';
 import {
     GET_FILMS_ERROR,
     GET_FILMS_LOADING,
@@ -32,7 +32,6 @@ const INIT_STATE = {
     },
     loading: false,
     error: null,
-    page: 1,
     totalPages: null,
     total_results: null,
 };
@@ -58,6 +57,15 @@ const reducer = (state = INIT_STATE, action) => {
                 totalPages: action.payload.total_pages,
                 totalResult: action.payload.total_results,
             };
+
+        case SET_SEARCH_RESULTS:
+            return {
+                ...state,
+                loading: false,
+                error: null,
+                films: action.payload.results,
+            };
+
         case GET_ONE_FILM_LOADING:
             return {
                 ...state,
@@ -95,10 +103,25 @@ const reducer = (state = INIT_STATE, action) => {
 const FilmsContext = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, INIT_STATE);
 
-    const fetchFilms = async () => {
+    const fetchFilms = async (page) => {
         dispatch(filmsLoading());
         try {
-            const { data } = await axios(`${POPULAR_API}`);
+            const { data } = await axios(`${POPULAR_API}${page}`);
+            // const { data } = await axios(`${BASE_API}/${window.location.search}`);
+            // console.log(window.location.search);
+            dispatch(filmsSuccess(data));
+        } catch (error) {
+            console.log(error.message);
+            dispatch(filmsError(error.message));
+        }
+    };
+
+    // SET_SEARCH_RESULTS
+
+    const fetchSearchFilms = async (q) => {
+        dispatch(filmsLoading());
+        try {
+            const { data } = await axios(`${SEARCH_API}${q}`);
             // const { data } = await axios(`${BASE_API}/${window.location.search}`);
             // console.log(window.location.search);
             dispatch(filmsSuccess(data));
@@ -135,6 +158,7 @@ const FilmsContext = ({ children }) => {
                 oneFilmError: state.fimlDetails.error,
                 OneFilmsLoading: state.fimlDetails.loading,
                 fetchOneFilm,
+                fetchSearchFilms,
             }}
         >
             {children}

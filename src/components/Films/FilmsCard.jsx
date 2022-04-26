@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { IoStarOutline, IoStar } from 'react-icons/io5';
+import { Loader } from './FilmsList';
 
 const CardWrapper = styled.div`
     padding: 15px 15px;
@@ -30,10 +31,34 @@ const CardButton = styled.button`
 
 const FilmCard = ({ film }) => {
     const [fav, setFav] = useState(true);
-    console.log(film);
+    // console.log(film);
+
+    if (!film) {
+        return <Loader>Loading...</Loader>;
+    }
+
+    if (!film.title) {
+        return (
+            <CardWrapper>
+                <h3>{film.name}</h3>
+                {film.logo_path ? (
+                    <div>
+                        <img
+                            width={200}
+                            src={`https://image.tmdb.org/t/p/original${film.logo_path}`}
+                        />
+                    </div>
+                ) : null}
+                <Link to={`${film.id}`}>
+                    <CardButton>Read more</CardButton>
+                </Link>
+            </CardWrapper>
+        );
+    }
+
     return (
         <CardWrapper>
-            <h3>{film.title.substring(0, 20)}...</h3>
+            <h3>{film?.title.substring(0, 20)}...</h3>
             <div style={{ margin: '15px 0' }}>
                 <img
                     width={270}
