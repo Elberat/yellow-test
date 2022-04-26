@@ -3,6 +3,7 @@ import { Container } from '../../App';
 import { favoriteContext } from '../../context/FavoriteContext';
 import { useFilms } from '../../context/FilmContext';
 import FilmCard from '../Films/FilmsCard';
+import { Loader, ListWrapper } from '../Films/FilmsList';
 
 const Favorite = () => {
     const { getFavorite, favorite, deleteFromFavorite } =
@@ -21,10 +22,15 @@ const Favorite = () => {
     return (
         <Container>
             <h2>Favorite films</h2>
-            {favorite.films.map((film) => (
-                <FilmCard genres={genres} key={film.item.id} film={film.item} />
-            ))}
-            {/* {favorite.films.map((film) => console.log(film.item))} */}
+            <ListWrapper>
+                {favorite.films.map((film) => (
+                    <FilmCard
+                        genres={genres}
+                        key={film.item.id}
+                        film={film.item}
+                    />
+                ))}
+            </ListWrapper>
         </Container>
     );
 };

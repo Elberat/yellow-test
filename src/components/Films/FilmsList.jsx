@@ -9,17 +9,12 @@ export const Loader = styled.h2`
     margin: 20% auto;
 `;
 
-const ListWrapper = styled.div`
+export const ListWrapper = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     flex-wrap: wrap;
 `;
-
-// fetchGenres,
-// genresLoading: state.genresState.loading,
-// genresError: state.genresState.error,
-// genres: state.genresState.genres,
 
 const FilmsList = () => {
     const {
@@ -33,12 +28,24 @@ const FilmsList = () => {
         genresLoading,
     } = useFilms();
 
+    const [allFilms, setAllFilms] = useState([]);
+
     const [page, setPage] = useState(1);
 
     useEffect(() => {
-        fetchFilms(page);
+        // fetchFilms(page);
         fetchGenres();
+    }, []);
+
+    useEffect(() => {
+        setAllFilms([...allFilms, ...films]);
+    }, [films]);
+
+    useEffect(() => {
+        fetchFilms(page);
     }, [page]);
+    console.log(films);
+    console.log(allFilms);
 
     useEffect(() => {
         document.addEventListener('scroll', scrollHandler);
@@ -74,7 +81,7 @@ const FilmsList = () => {
             <Container>
                 <h2>Popular Films</h2>
                 <ListWrapper>
-                    {films.map((film) => (
+                    {allFilms.map((film) => (
                         <FilmCard genres={genres} key={film.id} film={film} />
                     ))}
                 </ListWrapper>
