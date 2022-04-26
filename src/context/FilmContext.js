@@ -182,7 +182,7 @@ const FilmsContextProvider = ({ children }) => {
         dispatch(getOneFilmLoading());
         try {
             const { data } = await axios(
-                `${BASE_API}${id}?api_key=${API_KEY_V3}`
+                `${BASE_API}movie/${id}?${API_KEY_V3}`
             );
             dispatch(getoneFilmSuccess(data));
         } catch (error) {
