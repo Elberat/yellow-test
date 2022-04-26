@@ -29,44 +29,38 @@ const CardButton = styled.button`
     }
 `;
 
-const FilmCard = ({ film }) => {
+const FilmCard = ({ film, genres }) => {
     const [fav, setFav] = useState(true);
-    // console.log(film);
+    console.log(film, genres);
+    const filmGenresId = film.genre_ids;
+    console.log(filmGenresId);
+    let filmGenresArr = genres.filter((genre) =>
+        filmGenresId.includes(genre.id)
+    );
+    console.log(filmGenresArr);
 
     if (!film) {
         return <Loader>Loading...</Loader>;
     }
 
-    if (!film.title) {
-        return (
-            <CardWrapper>
-                <h3>{film.name}</h3>
-                {film.logo_path ? (
-                    <div>
-                        <img
-                            width={200}
-                            src={`https://image.tmdb.org/t/p/original${film.logo_path}`}
-                        />
-                    </div>
-                ) : null}
-                <Link to={`${film.id}`}>
-                    <CardButton>Read more</CardButton>
-                </Link>
-            </CardWrapper>
-        );
-    }
-
     return (
         <CardWrapper>
-            <h3>{film?.title.substring(0, 20)}...</h3>
+            <h3>
+                {film.title
+                    ? film.title.substring(0, 20)
+                    : film.name.substring(0, 20)}
+                ...
+            </h3>
             <div style={{ margin: '15px 0' }}>
                 <img
                     width={270}
                     src={`https://image.tmdb.org/t/p/original${film.poster_path}`}
+                    alt={film.title}
                 />
             </div>
             <p style={{ margin: '5px 0' }}>
-                <b>Overview:</b> {film.overview.substring(0, 50)}...
+                <b>Overview:</b>{' '}
+                {film.overview ? film.overview.substring(0, 50) : ''}...
             </p>
             <p>
                 <b>Release:</b> {film.release_date}
@@ -77,6 +71,12 @@ const FilmCard = ({ film }) => {
                 ) : (
                     <IoStar style={{ fontSize: '22px' }} />
                 )} */}
+            </div>
+            <div>
+                <b>Genres:</b>
+                {filmGenresArr.map((item) => (
+                    <span> {item.name} </span>
+                ))}
             </div>
             <Link to={`${film.id}`}>
                 <CardButton>Read more</CardButton>

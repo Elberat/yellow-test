@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Container } from '../../App';
 import { useFilms } from '../../context/FilmContext';
@@ -16,14 +16,29 @@ const ListWrapper = styled.div`
     flex-wrap: wrap;
 `;
 
+// fetchGenres,
+// genresLoading: state.genresState.loading,
+// genresError: state.genresState.error,
+// genres: state.genresState.genres,
+
 const FilmsList = () => {
-    const { fetchFilms, error, loading, films } = useFilms();
+    const {
+        fetchFilms,
+        error,
+        loading,
+        films,
+        fetchGenres,
+        genres,
+        genresError,
+        genresLoading,
+    } = useFilms();
+
     const [page, setPage] = useState(1);
 
     useEffect(() => {
         fetchFilms(page);
+        fetchGenres();
     }, [page]);
-    console.log(films, page);
 
     useEffect(() => {
         document.addEventListener('scroll', scrollHandler);
@@ -36,13 +51,13 @@ const FilmsList = () => {
         if (
             e.target.documentElement.scrollHeight -
                 (e.target.documentElement.scrollTop + window.innerHeight) <
-            100
+            50
         ) {
             setPage(page + 1);
         }
     };
 
-    if (loading) {
+    if (loading && genresLoading) {
         return <Loader>Loading...</Loader>;
     }
 
@@ -50,20 +65,19 @@ const FilmsList = () => {
         return <Loader>{error}</Loader>;
     }
 
-    if (films) {
+    if (genresError) {
+        return <Loader>{genresError}</Loader>;
+    }
+
+    if (films && genres) {
         return (
             <Container>
                 <h2>Popular Films</h2>
                 <ListWrapper>
                     {films.map((film) => (
-                        <FilmCard key={film.id} film={film} />
+                        <FilmCard genres={genres} key={film.id} film={film} />
                     ))}
                 </ListWrapper>
-
-                {/* <div style={{ width: '100px' }}>
-                    <div>prev</div>
-                    <div onClick={() => setPage(page + 1)}>next</div>
-                </div> */}
             </Container>
         );
     }

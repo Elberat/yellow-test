@@ -4,4 +4,7 @@ export const API_KEY_V4 =
 
 export const BASE_API = `https://api.themoviedb.org/3/movie/`;
 export const POPULAR_API = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY_V3}&page=`;
-export const SEARCH_API = `https://api.themoviedb.org/3/search/company?api_key=${API_KEY_V3}&query=`;
+// export const SEARCH_API = `https://api.themoviedb.org/3/search/company?api_key=${API_KEY_V3}&query=`;
+export const SEARCH_API = `https://api.themoviedb.org/3/search/multi?api_key=${API_KEY_V3}&query=`;
+// export const GENRES_API = `https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY_V3}`;
+export const GENRES_API = `https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY_V3}&language=en-US`;

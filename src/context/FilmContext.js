@@ -1,6 +1,12 @@
 import React, { useContext, useReducer, useState } from 'react';
 import axios from 'axios';
-import { POPULAR_API, BASE_API, API_KEY_V3, SEARCH_API } from '../constants';
+import {
+    POPULAR_API,
+    BASE_API,
+    API_KEY_V3,
+    SEARCH_API,
+    GENRES_API,
+} from '../constants';
 import {
     GET_FILMS_ERROR,
     GET_FILMS_LOADING,
@@ -9,6 +15,9 @@ import {
     GET_ONE_FILM_ERROR,
     GET_ONE_FILM_LOADING,
     GET_ONE_FILM_SUCCESS,
+    GET_GENRES_ERROR,
+    GET_GENRES_LOADING,
+    GET_GENRES_SUCCESS,
 } from './constants';
 
 import { filmsError, filmsLoading, filmsSuccess } from './FilmActions';
@@ -19,12 +28,19 @@ import {
     getOneFilmLoading,
 } from './FilmDetailsAction';
 
+import { genresError, genresLoading, genresSuccess } from './GenresActions';
+
 const filmsContext = React.createContext();
 
 export const useFilms = () => useContext(filmsContext);
 
 const INIT_STATE = {
     films: [],
+    genresState: {
+        loading: false,
+        error: null,
+        genres: null,
+    },
     fimlDetails: {
         loading: false,
         error: null,
@@ -96,6 +112,37 @@ const reducer = (state = INIT_STATE, action) => {
                     film: action.payload,
                 },
             };
+
+        case GET_GENRES_LOADING:
+            return {
+                ...state,
+                genresState: {
+                    ...state.genresState,
+                    loading: true,
+                },
+            };
+
+        case GET_GENRES_ERROR:
+            return {
+                ...state,
+                genresState: {
+                    ...state.genresState,
+                    loading: false,
+                    error: action.payload,
+                    genres: null,
+                },
+            };
+
+        case GET_GENRES_SUCCESS:
+            return {
+                ...state,
+                genresState: {
+                    ...state.genresState,
+                    loading: false,
+                    error: null,
+                    genres: action.payload.genres,
+                },
+            };
         default:
             return state;
     }
@@ -122,8 +169,6 @@ const FilmsContext = ({ children }) => {
         dispatch(filmsLoading());
         try {
             const { data } = await axios(`${SEARCH_API}${q}`);
-            // const { data } = await axios(`${BASE_API}/${window.location.search}`);
-            // console.log(window.location.search);
             dispatch(filmsSuccess(data));
         } catch (error) {
             console.log(error.message);
@@ -144,6 +189,17 @@ const FilmsContext = ({ children }) => {
         }
     };
 
+    const fetchGenres = async () => {
+        dispatch(genresLoading());
+        try {
+            const { data } = await axios(`${GENRES_API}`);
+            dispatch(genresSuccess(data));
+        } catch (error) {
+            console.log(error.message);
+            dispatch(genresError(error.message));
+        }
+    };
+
     return (
         <filmsContext.Provider
             value={{
@@ -159,6 +215,10 @@ const FilmsContext = ({ children }) => {
                 OneFilmsLoading: state.fimlDetails.loading,
                 fetchOneFilm,
                 fetchSearchFilms,
+                fetchGenres,
+                genresLoading: state.genresState.loading,
+                genresError: state.genresState.error,
+                genres: state.genresState.genres,
             }}
         >
             {children}
