@@ -95,6 +95,7 @@ const FilmCard = ({ film, genres }) => {
             <div style={{ margin: '15px 0' }}>
                 <img
                     width={270}
+                    height={405}
                     src={`https://image.tmdb.org/t/p/original${film.poster_path}`}
                     alt={film.title}
                 />

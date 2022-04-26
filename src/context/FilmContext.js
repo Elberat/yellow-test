@@ -20,7 +20,12 @@ import {
     GET_GENRES_SUCCESS,
 } from './constants';
 
-import { filmsError, filmsLoading, filmsSuccess } from './actions/FilmActions';
+import {
+    filmsError,
+    filmsLoading,
+    filmsSuccess,
+    setSearchResults,
+} from './actions/FilmActions';
 
 import {
     getoneFilmSuccess,
@@ -52,8 +57,6 @@ const INIT_STATE = {
     },
     loading: false,
     error: null,
-    totalPages: null,
-    total_results: null,
 };
 const reducer = (state = INIT_STATE, action) => {
     switch (action.type) {
@@ -73,9 +76,8 @@ const reducer = (state = INIT_STATE, action) => {
                 ...state,
                 loading: false,
                 error: null,
-                films: action.payload.results,
-                totalPages: action.payload.total_pages,
-                totalResult: action.payload.total_results,
+                films: [...state.films, ...action.payload.results],
+                // films: action.payload.results,
             };
 
         case SET_SEARCH_RESULTS:
@@ -158,8 +160,6 @@ const FilmsContextProvider = ({ children }) => {
         dispatch(filmsLoading());
         try {
             const { data } = await axios(`${POPULAR_API}${page}`);
-            // const { data } = await axios(`${BASE_API}/${window.location.search}`);
-            // console.log(window.location.search);
             dispatch(filmsSuccess(data));
         } catch (error) {
             console.log(error.message);
@@ -167,13 +167,11 @@ const FilmsContextProvider = ({ children }) => {
         }
     };
 
-    // SET_SEARCH_RESULTS
-
     const fetchSearchFilms = async (q) => {
         dispatch(filmsLoading());
         try {
             const { data } = await axios(`${SEARCH_API}${q}`);
-            dispatch(filmsSuccess(data));
+            dispatch(setSearchResults(data));
         } catch (error) {
             console.log(error.message);
             dispatch(filmsError(error.message));

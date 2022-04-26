@@ -28,24 +28,19 @@ const FilmsList = () => {
         genresLoading,
     } = useFilms();
 
-    const [allFilms, setAllFilms] = useState([]);
-
     const [page, setPage] = useState(1);
 
     useEffect(() => {
-        // fetchFilms(page);
+        fetchFilms(page);
         fetchGenres();
     }, []);
 
     useEffect(() => {
-        setAllFilms([...allFilms, ...films]);
-    }, [films]);
-
-    useEffect(() => {
-        fetchFilms(page);
+        if (page !== 1) {
+            fetchFilms(page);
+        }
     }, [page]);
     console.log(films);
-    console.log(allFilms);
 
     useEffect(() => {
         document.addEventListener('scroll', scrollHandler);
@@ -81,7 +76,7 @@ const FilmsList = () => {
             <Container>
                 <h2>Popular Films</h2>
                 <ListWrapper>
-                    {allFilms.map((film) => (
+                    {films.map((film) => (
                         <FilmCard genres={genres} key={film.id} film={film} />
                     ))}
                 </ListWrapper>
