@@ -4,6 +4,6 @@ export const API_KEY_V4 =
 
 export const BASE_API = `https://api.themoviedb.org/3/`;
 export const POPULAR_API = `${BASE_API}movie/popular?${API_KEY_V3}&page=`;
-export const SEARCH_API = `${BASE_API}search/multi?${API_KEY_V3}&query=`;
+export const SEARCH_API = `${BASE_API}search/movie?${API_KEY_V3}&query=`;
 export const GENRES_API = `${BASE_API}genre/movie/list?${API_KEY_V3}&language=en-US`;
 export const SIMILAR_API = `${BASE_API}movie/414906/similar?${API_KEY_V3}`;
