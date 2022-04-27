@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Loader } from './FilmsList';
 import { favoriteContext } from '../../context/FavoriteContext';
 
@@ -76,60 +76,62 @@ const FilmCard = ({ film, genres }) => {
     );
 
     const filmGenresId = film.genre_ids;
-    let filmGenresArr = genres.filter((genre) =>
-        filmGenresId.includes(genre.id)
-    );
 
     if (!film || !filmGenresId) {
         return <Loader>Loading...</Loader>;
     }
-    return (
-        <CardWrapper>
-            <h3>
-                {film.title
-                    ? film.title.substring(0, 20)
-                    : film.name.substring(0, 20)}
-                ...
-            </h3>
-            <div style={{ margin: '15px 0' }}>
-                <img
-                    width={270}
-                    height={405}
-                    src={`https://image.tmdb.org/t/p/original${film.poster_path}`}
-                    alt={film.title}
-                />
-            </div>
-            <p style={{ margin: '5px 0' }}>
-                <b>Overview:</b>{' '}
-                {film.overview ? film.overview.substring(0, 50) : ''}...
-            </p>
-            <p>
-                <b>Release:</b> {film.release_date}
-            </p>
-            <div>
-                <b>Genres:</b>
-                {filmGenresArr.map((item) => (
-                    <span> {item.name} </span>
-                ))}
-            </div>
-            <div
-                onClick={() => {
-                    addProductToFavorite(film);
-                    setCheckFavorite(checkItemInFavorite(film.id));
-                }}
-            >
-                {!checkFavorite ? (
-                    <FavButton>Add to favorites</FavButton>
-                ) : (
-                    <RemoveFavButton>Remove from favorites</RemoveFavButton>
-                )}
-            </div>
+    if (film && filmGenresId) {
+        let filmGenresArr = genres.filter((genre) =>
+            filmGenresId.includes(genre.id)
+        );
+        return (
+            <CardWrapper>
+                <h3>
+                    {film.title
+                        ? film.title.substring(0, 20)
+                        : film.name.substring(0, 20)}
+                    ...
+                </h3>
+                <div style={{ margin: '15px 0' }}>
+                    <img
+                        width={270}
+                        height={405}
+                        src={`https://image.tmdb.org/t/p/original${film.poster_path}`}
+                        alt={film.title}
+                    />
+                </div>
+                <p style={{ margin: '5px 0' }}>
+                    <b>Overview:</b>{' '}
+                    {film.overview ? film.overview.substring(0, 50) : ''}...
+                </p>
+                <p>
+                    <b>Release:</b> {film.release_date}
+                </p>
+                <div>
+                    <b>Genres:</b>
+                    {filmGenresArr.map((item) => (
+                        <span> {item.name} </span>
+                    ))}
+                </div>
+                <div
+                    onClick={() => {
+                        addProductToFavorite(film);
+                        setCheckFavorite(checkItemInFavorite(film.id));
+                    }}
+                >
+                    {!checkFavorite ? (
+                        <FavButton>Add to favorites</FavButton>
+                    ) : (
+                        <RemoveFavButton>Remove from favorites</RemoveFavButton>
+                    )}
+                </div>
 
-            <Link to={`/${film.id}`}>
-                <CardButton>Read more</CardButton>
-            </Link>
-        </CardWrapper>
-    );
+                <Link to={`/${film.id}`}>
+                    <CardButton>Read more</CardButton>
+                </Link>
+            </CardWrapper>
+        );
+    }
 };
 
 export default FilmCard;
