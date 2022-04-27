@@ -77,7 +77,11 @@ const FilmsList = () => {
                 <h2>Popular Films</h2>
                 <ListWrapper>
                     {films.map((film) => (
-                        <FilmCard genres={genres} key={film.id} film={film} />
+                        <FilmCard
+                            genres={genres}
+                            key={film.id + Date.now}
+                            film={film}
+                        />
                     ))}
                 </ListWrapper>
             </Container>

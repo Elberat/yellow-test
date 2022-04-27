@@ -18,6 +18,12 @@ import {
     GET_GENRES_ERROR,
     GET_GENRES_LOADING,
     GET_GENRES_SUCCESS,
+    GET_REC_ERROR,
+    GET_REC_LOADING,
+    GET_REC_SUCCESS,
+    GET_SIMILAR_ERROR,
+    GET_SIMILAR_LOADING,
+    GET_SIMILAR_SUCCESS,
 } from './constants';
 
 import {
@@ -39,24 +45,43 @@ import {
     genresSuccess,
 } from './actions/GenresActions';
 
+import {
+    recError,
+    recLoading,
+    recSuccess,
+    similarError,
+    similarLoading,
+    similarSuccess,
+} from './actions/RecAndSimilarActions';
+
 const filmsContext = React.createContext();
 
 export const useFilms = () => useContext(filmsContext);
 
 const INIT_STATE = {
     films: [],
-    genresState: {
-        loading: false,
-        error: null,
-        genres: null,
-    },
+    loading: false,
+    error: null,
     fimlDetails: {
         loading: false,
         error: null,
         film: null,
     },
-    loading: false,
-    error: null,
+    genresState: {
+        loading: false,
+        error: null,
+        genres: null,
+    },
+    recState: {
+        loading: false,
+        error: null,
+        rec: null,
+    },
+    similarState: {
+        loading: false,
+        error: null,
+        similar: null,
+    },
 };
 const reducer = (state = INIT_STATE, action) => {
     switch (action.type) {
@@ -149,6 +174,67 @@ const reducer = (state = INIT_STATE, action) => {
                     genres: action.payload.genres,
                 },
             };
+        case GET_REC_LOADING:
+            return {
+                ...state,
+                recState: {
+                    ...state.recState,
+                    loading: true,
+                },
+            };
+
+        case GET_REC_ERROR:
+            return {
+                ...state,
+                recState: {
+                    ...state.recState,
+                    loading: false,
+                    error: action.payload,
+                    rec: null,
+                },
+            };
+
+        case GET_REC_SUCCESS:
+            return {
+                ...state,
+                recState: {
+                    ...state.recState,
+                    loading: false,
+                    error: null,
+                    rec: action.payload,
+                },
+            };
+
+        case GET_SIMILAR_LOADING:
+            return {
+                ...state,
+                similarState: {
+                    ...state.similarState,
+                    loading: true,
+                },
+            };
+
+        case GET_SIMILAR_ERROR:
+            return {
+                ...state,
+                similarState: {
+                    ...state.similarState,
+                    loading: false,
+                    error: action.payload,
+                    similar: null,
+                },
+            };
+
+        case GET_SIMILAR_SUCCESS:
+            return {
+                ...state,
+                similarState: {
+                    ...state.similarState,
+                    loading: false,
+                    error: null,
+                    similar: action.payload,
+                },
+            };
         default:
             return state;
     }
@@ -191,6 +277,32 @@ const FilmsContextProvider = ({ children }) => {
         }
     };
 
+    const fetchRecs = async (id) => {
+        dispatch(recLoading());
+        try {
+            const { data } = await axios(
+                `${BASE_API}movie/${id}/recommendations?${API_KEY_V3}`
+            );
+            dispatch(recSuccess(data));
+        } catch (error) {
+            console.log(error.message);
+            dispatch(recError(error.message));
+        }
+    };
+
+    const fetchSimilar = async (id) => {
+        dispatch(similarLoading());
+        try {
+            const { data } = await axios(
+                `${BASE_API}movie/${id}/similar?${API_KEY_V3}&limit=10`
+            );
+            dispatch(similarSuccess(data));
+        } catch (error) {
+            console.log(error.message);
+            dispatch(similarError(error.message));
+        }
+    };
+
     const fetchGenres = async () => {
         dispatch(genresLoading());
         try {
@@ -208,9 +320,6 @@ const FilmsContextProvider = ({ children }) => {
                 films: state.films,
                 loading: state.loading,
                 error: state.error,
-                page: state.page,
-                totalPages: state.totalPages,
-                total_results: state.totalResult,
                 fetchFilms,
                 oneFimlDetails: state.fimlDetails.film,
                 oneFilmError: state.fimlDetails.error,
@@ -221,6 +330,14 @@ const FilmsContextProvider = ({ children }) => {
                 genresLoading: state.genresState.loading,
                 genresError: state.genresState.error,
                 genres: state.genresState.genres,
+                fetchRecs,
+                recError: state.recState.error,
+                rec: state.recState.rec,
+                recLoading: state.recState.loading,
+                fetchSimilar,
+                similarError: state.similarState.error,
+                similarLoading: state.similarState.loading,
+                similar: state.similarState.similar,
             }}
         >
             {children}

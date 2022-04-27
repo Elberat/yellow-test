@@ -29,8 +29,12 @@ const Routing = () => {
 
     return (
         <Routes>
-            {PUBLIC_ROUTES.map((item) => (
-                <Route key={item.id} path={item.link} element={item.element} />
+            {PUBLIC_ROUTES.map((route) => (
+                <Route
+                    key={route.id}
+                    path={route.link}
+                    element={route.element}
+                />
             ))}
         </Routes>
     );

@@ -15,7 +15,7 @@ const Favorite = () => {
     }, []);
     console.log(favorite.films);
 
-    if (!favorite.films) {
+    if (!favorite.films || !genres) {
         return <h2>loading</h2>;
     }
     return (

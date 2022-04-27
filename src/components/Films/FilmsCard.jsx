@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Loader } from './FilmsList';
 import { favoriteContext } from '../../context/FavoriteContext';
 
@@ -80,10 +80,9 @@ const FilmCard = ({ film, genres }) => {
         filmGenresId.includes(genre.id)
     );
 
-    if (!film) {
+    if (!film || !filmGenresId) {
         return <Loader>Loading...</Loader>;
     }
-
     return (
         <CardWrapper>
             <h3>
@@ -126,7 +125,7 @@ const FilmCard = ({ film, genres }) => {
                 )}
             </div>
 
-            <Link to={`${film.id}`}>
+            <Link to={`/${film.id}`}>
                 <CardButton>Read more</CardButton>
             </Link>
         </CardWrapper>
