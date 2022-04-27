@@ -48,7 +48,7 @@ const Navbar = () => {
     console.log(search);
 
     const handleSearch = () => {
-        fetchSearchFilms(search);
+        if (search) fetchSearchFilms(search.trim());
     };
 
     return (
